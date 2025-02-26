@@ -22,7 +22,7 @@ jobs:
         with:
           add-labels: "backlog"
           remove-labels: "inprogress, close"
-          repo-token: ${{ secrets.PAT }}
+          repo-token: ${{ secrets.key }}
           ignore-if-assigned: true
 
       - name: Set priority label
@@ -35,14 +35,14 @@ jobs:
             gh issue edit ${{ github.event.issue.number }} --add-label "priority:weekly"
           fi
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
+          GITHUB_TOKEN: ${{ secrets.key }}
       - name: Add inprogress label
         if: github.event.action == 'assigned' || github.event.action == 'reopened'
         uses: andymckay/labeler@1.0.2
         with:
           add-labels: "inprogress"
           remove-labels: "backlog, close"
-          repo-token: ${{ secrets.PAT }}
+          repo-token: ${{ secrets.key }}
           ignore-if-assigned: true
       - name: Add close label
         if: github.event.action == 'closed'
@@ -50,7 +50,7 @@ jobs:
         with:
           add-labels: "close"
           remove-labels: "inprogress, backlog"
-          repo-token: ${{ secrets.PAT }}
+          repo-token: ${{ secrets.key }}
           ignore-if-assigned: true
 
   assign_issue_to_project:
@@ -64,8 +64,9 @@ jobs:
         uses: technote-space/create-project-card-action@v1
         if: github.event.action == 'opened'
         with:
-          PROJECT: ${{env.PROJECT_NAME}}
+          PROJECT: "test"
           COLUMN: Backlog
+          GITHUB_TOKEN: ${{ secrets.key }}
 
   move_assigned_card:
     runs-on: ubuntu-latest
@@ -77,12 +78,12 @@ jobs:
       - uses: alex-page/github-project-automation-plus@v0.3.0
         if: github.event.action == 'assigned'
         with:
-          project: ${{env.PROJECT_NAME}}
+          project: "test"
           column: In Progress
-          repo-token: ${{ secrets.PAT }}
+          repo-token: ${{ secrets.key }}
       - uses: alex-page/github-project-automation-plus@v0.3.0
         if: github.event.action == 'reopened'
         with:
-          project: ${{env.PROJECT_NAME}}
+          project: "test"
           column: In Progress
-          repo-token: ${{ secrets.PAT }}
+          repo-token: ${{ secrets.key }}
