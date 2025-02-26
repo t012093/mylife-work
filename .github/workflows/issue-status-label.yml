@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       issues: write
+      contents: read
+      repository-projects: write
     steps:
       - name: Add backlog label
         if: github.event.action == 'opened'
@@ -42,6 +44,9 @@ jobs:
   assign_issue_to_project:
     name: Assign issues to project
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      repository-projects: write
     steps:
       - name: Assign issues to project
         uses: technote-space/create-project-card-action@v1
@@ -53,6 +58,9 @@ jobs:
   move_assigned_card:
     runs-on: ubuntu-latest
     name: Move assigned card
+    permissions:
+      issues: write
+      repository-projects: write
     steps:
       - uses: alex-page/github-project-automation-plus@v0.3.0
         if: github.event.action == 'assigned'
