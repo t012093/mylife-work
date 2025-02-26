@@ -8,6 +8,10 @@
 - 担当者がアサインされると自動的に「In Progress」列に移動
 - Issue がクローズされると自動的に「Done」列に移動
 - 各状態に応じて自動的にラベル（backlog/inprogress/close）を付与
+- プリオリティ管理機能
+  - Daily（毎日対応）: `priority:daily`ラベル
+  - Weekly（週次対応）: `priority:weekly`ラベル
+  - Issue作成時にテンプレートから優先度を選択可能
 
 ## セットアップ
 
@@ -17,7 +21,7 @@
    - 必要な権限: `repo` スコープ
 3. リポジトリの Settings > Secrets に PAT を `PAT` という名前で追加
 4. Projects タブでプロジェクトを作成
-   - プロジェクト名を「todo」に設定
+   - プロジェクト名を「test」に設定
    - 「Backlog」「In Progress」「Done」の3つの列を作成
 
 ## 使用方法

@@ -1,0 +1,39 @@
+name: タスク
+description: 新しいタスクを作成
+title: "[Task]: "
+labels: ["backlog"]
+body:
+  - type: markdown
+    attributes:
+      value: "## 新しいタスクの作成"
+
+  - type: textarea
+    id: description
+    attributes:
+      label: タスクの説明
+      description: タスクの詳細を記述してください
+      placeholder: タスクの内容を具体的に記述してください
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 優先度
+      description: タスクの優先度を選択してください
+      options:
+        - Daily（毎日対応）
+        - Weekly（週次対応）
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: tasks
+    attributes:
+      label: タスクチェックリスト
+      description: 必要なタスクにチェックを入れてください
+      options:
+        - label: 実装
+        - label: テスト
+        - label: ドキュメント
+        - label: レビュー

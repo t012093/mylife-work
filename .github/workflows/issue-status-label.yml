@@ -7,7 +7,7 @@ on:
       - closed
       - assigned
 env:
-  PROJECT_NAME: todo
+  PROJECT_NAME: test
 jobs:
   issue_labels:
     runs-on: ubuntu-latest
@@ -16,7 +16,7 @@ jobs:
       contents: read
       repository-projects: write
     steps:
-      - name: Add backlog label
+      - name: Add initial labels
         if: github.event.action == 'opened'
         uses: andymckay/labeler@1.0.2
         with:
@@ -24,6 +24,18 @@ jobs:
           remove-labels: "inprogress, close"
           repo-token: ${{ secrets.PAT }}
           ignore-if-assigned: true
+
+      - name: Set priority label
+        if: github.event.action == 'opened'
+        run: |
+          body="${{ github.event.issue.body }}"
+          if echo "$body" | grep -q "Daily（毎日対応）"; then
+            gh issue edit ${{ github.event.issue.number }} --add-label "priority:daily"
+          elif echo "$body" | grep -q "Weekly（週次対応）"; then
+            gh issue edit ${{ github.event.issue.number }} --add-label "priority:weekly"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
       - name: Add inprogress label
         if: github.event.action == 'assigned' || github.event.action == 'reopened'
         uses: andymckay/labeler@1.0.2
