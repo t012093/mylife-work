@@ -1,26 +1,60 @@
 name: エンジニアリングタスク
 description: 開発関連のタスクを作成
-title: "[Dev]: "
+title: "⚡ "
 labels: ["engineering"]
 body:
+  - type: textarea
+    id: overview
+    attributes:
+      label: プロジェクト概要
+      description: タスクの目的と概要を記述してください
+      placeholder: |
+        例：新機能の実装、既存機能の改善、インフラ構築など
+    validations:
+      required: true
+
   - type: dropdown
     id: category
     attributes:
       label: 開発カテゴリ
       description: タスクの種類を選択してください
       options:
-        - 機能実装
-        - バグ修正
-        - リファクタリング
-        - テスト作成
-        - 設計・アーキテクチャ
-        - パフォーマンス改善
-        - セキュリティ対応
-        - ドキュメント作成
-        - 環境構築
-        - 調査・検証
-        - レビュー
-        - その他
+        - 🚀 機能実装
+        - 🐛 バグ修正
+        - ♻️ リファクタリング
+        - 🏗️ インフラ構築
+        - 🔄 CI/CD整備
+        - 📊 監視・運用
+        - ⚡ パフォーマンス改善
+        - 🔒 セキュリティ対応
+        - 📝 ドキュメント作成
+        - 🔍 調査・検証
+    validations:
+      required: true
+
+  - type: textarea
+    id: technical_requirements
+    attributes:
+      label: 技術要件
+      description: 実装に必要な技術要件を記述してください
+      placeholder: |
+        ## 📋 実装要件
+        - [ ] 要件1
+        - [ ] 要件2
+        
+        ## 🛠️ 技術スタック
+        ```yaml
+        frontend:
+          - React
+          - TypeScript
+        backend:
+          - Node.js
+          - Express
+        ```
+        
+        ## 🏗️ インフラ構成
+        - [ ] 構成要素1
+        - [ ] 構成要素2
     validations:
       required: true
 
@@ -30,45 +64,44 @@ body:
       label: 優先度
       description: タスクの優先度を選択してください
       options:
-        - Critical（即時対応）
-        - High（今週中）
-        - Medium（来週中）
-        - Low（対応予定）
+        - 🔥 Daily（毎日対応）
+        - 📅 Weekly（週次対応）
+        - 📆 Monthly（月次対応）
     validations:
       required: true
-
-  - type: input
-    id: related_components
-    attributes:
-      label: 関連コンポーネント
-      description: 関連するコンポーネントやモジュール名
-      placeholder: 例：認証システム、ユーザー管理など
 
   - type: textarea
-    id: technical_details
+    id: completion_criteria
     attributes:
-      label: 技術的詳細
-      description: 実装の詳細や技術的な要件を記述してください
+      label: 完了基準
+      description: タスクが完了したと判断できる基準を記述してください
       placeholder: |
-        ### 概要
+        ## ✅ 必須要件
+        - [ ] 要件1
+        - [ ] 要件2
         
-        ### 技術要件
-        
-        ### 変更範囲
-        
-        ### 注意点
-    validations:
-      required: true
+        ## 🎯 受け入れ基準
+        - [ ] テストが全て通過
+        - [ ] コードレビュー完了
+        - [ ] ドキュメント更新済み
 
-  - type: checkboxes
-    id: checklist
+  - type: textarea
+    id: timeline
     attributes:
-      label: 実施事項
-      description: 必要な作業項目にチェックを入れてください
-      options:
-        - label: 設計レビュー
-        - label: 実装
-        - label: ユニットテスト
-        - label: 結合テスト
-        - label: ドキュメント更新
-        - label: コードレビュー
+      label: タイムライン
+      description: 作業工程と予定期間を記述してください
+      placeholder: |
+        1. ⚙️ 設計フェーズ: X日
+        2. 💻 実装フェーズ: X日
+        3. 🧪 テストフェーズ: X日
+        4. 👀 レビュー・修正: X日
+
+  - type: textarea
+    id: references
+    attributes:
+      label: 参考資料・関連リンク
+      description: 関連するドキュメントやリソースへのリンクを記載してください
+      placeholder: |
+        - 📚 [技術仕様書]()
+        - 📋 [設計ドキュメント]()
+        - 🔗 [外部サービスAPI]()

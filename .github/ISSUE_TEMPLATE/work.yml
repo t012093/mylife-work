@@ -1,26 +1,22 @@
 name: 仕事タスク
 description: 業務関連のタスクを作成
-title: "[Work]: "
+title: "💼 "
 labels: ["work"]
 body:
-  - type: dropdown
-    id: category
+  - type: textarea
+    id: task_details
     attributes:
-      label: 業務カテゴリ
-      description: 業務の種類を選択してください
-      options:
-        - 会議・打ち合わせ
-        - 報告書・資料作成
-        - メール対応
-        - 企画・立案
-        - プレゼンテーション
-        - 調査・分析
-        - 顧客対応
-        - 部内調整
-        - 経費・請求処理
-        - 採用・人事
-        - 研修・セミナー
-        - その他
+      label: 業務内容
+      description: タスクの詳細を記述してください
+      placeholder: |
+        ## 📝 概要
+        
+        ## 🎯 目標
+        - [ ] 目標1
+        - [ ] 目標2
+        
+        ## 📊 期待される成果
+        
     validations:
       required: true
 
@@ -30,28 +26,65 @@ body:
       label: 優先度
       description: タスクの優先度を選択してください
       options:
-        - 緊急（当日中）
-        - 高（3日以内）
-        - 中（今週中）
-        - 低（来週以降）
+        - 🔥 Daily（毎日対応）
+        - 📅 Weekly（週次対応）
+        - 📆 Monthly（月次対応）
     validations:
       required: true
 
-  - type: input
-    id: deadline
+  - type: dropdown
+    id: category
     attributes:
-      label: 期限
-      description: 期限を入力してください（YYYY-MM-DD）
-      placeholder: 2024-03-01
+      label: 業務カテゴリ
+      description: タスクの種類を選択してください
+      options:
+        - 📊 報告・レポート
+        - 👥 ミーティング
+        - 📈 分析・調査
+        - 📑 書類作成
+        - 📞 コミュニケーション
+        - 🤝 調整・交渉
+        - 📌 その他
+    validations:
+      required: true
 
   - type: textarea
-    id: details
+    id: timeline
     attributes:
-      label: 詳細内容
-      description: タスクの詳細を記入してください
+      label: スケジュール
+      description: 作業予定と期限を記述してください
       placeholder: |
-        - 目的：
-        - 必要な準備：
-        - 注意点：
-    validations:
-      required: true
+        ## ⏰ 期限
+        YYYY/MM/DD
+
+        ## 📅 マイルストーン
+        1. 準備フェーズ: X日
+        2. 実行フェーズ: X日
+        3. フォローアップ: X日
+
+  - type: textarea
+    id: resources
+    attributes:
+      label: 必要なリソース
+      description: タスクの実行に必要なリソースを記載してください
+      placeholder: |
+        ## 👥 関係者
+        - 担当者:
+        - 承認者:
+        
+        ## 📁 必要書類
+        - [ ] 資料1
+        - [ ] 資料2
+        
+        ## 🔗 参考リンク
+        - [関連資料]()
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: 備考
+      description: その他の注意事項や補足情報があれば記載してください
+      placeholder: |
+        ## ⚠️ 注意事項
+        
+        ## 💡 アイデア・提案

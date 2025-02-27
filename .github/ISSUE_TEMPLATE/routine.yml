@@ -1,67 +1,108 @@
 name: ルーティーンタスク
-description: 日常的なルーティーンタスクを作成
-title: "[Routine]: "
+description: 定期的な習慣や日課のタスクを作成
+title: "🔄 "
 labels: ["routine"]
 body:
+  - type: textarea
+    id: activity_details
+    attributes:
+      label: 活動内容
+      description: 習慣づけたい活動の詳細を記述してください
+      placeholder: |
+        ## 🎯 目標
+        
+        ## ⭐ メリット
+        - 
+        
+        ## 📈 期待される効果
+        
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 優先度
+      description: タスクの優先度を選択してください
+      options:
+        - 🔥 Daily（毎日対応）
+        - 📅 Weekly（週次対応）
+        - 📆 Monthly（月次対応）
+    validations:
+      required: true
+
   - type: dropdown
     id: category
     attributes:
-      label: ルーティーンカテゴリ
-      description: 活動の種類を選択してください
+      label: 活動カテゴリ
+      description: 習慣の種類を選択してください
       options:
-        - 健康管理/運動
-        - 健康管理/食事
-        - 健康管理/睡眠
-        - 自己啓発/学習
-        - 自己啓発/読書
-        - 自己啓発/資格
-        - 家事/掃除・整理
-        - 家事/買い物
-        - 家事/料理
-        - 趣味・レジャー
-        - 財務管理
-        - 交友関係
-        - メンテナンス
-        - その他
-    validations:
-      required: true
-
-  - type: dropdown
-    id: frequency
-    attributes:
-      label: 頻度
-      description: タスクの実施頻度を選択してください
-      options:
-        - 毎日
-        - 平日のみ
-        - 週末のみ
-        - 週1回
-        - 月1回
-        - 不定期
-    validations:
-      required: true
-
-  - type: dropdown
-    id: time_of_day
-    attributes:
-      label: 実施時間帯
-      description: 予定している時間帯を選択してください
-      options:
-        - 朝（起床後）
-        - 午前中
-        - 昼間
-        - 夕方
-        - 夜
-        - 就寝前
+        - 🏃 運動・健康
+        - 📚 学習・自己啓発
+        - 🧘 マインドフルネス
+        - 🏠 家事・整理整頓
+        - 💪 トレーニング
+        - 🌱 趣味・教養
+        - 💼 キャリア開発
+        - 🤝 人間関係
     validations:
       required: true
 
   - type: textarea
-    id: details
+    id: schedule
+    attributes:
+      label: スケジュール
+      description: 実施タイミングと頻度を記述してください
+      placeholder: |
+        ## ⏰ 実施時間
+        例：朝6:00-7:00
+        
+        ## 📅 頻度
+        例：平日毎日
+        
+        ## ⌚ 所要時間
+        例：30分
+
+  - type: textarea
+    id: tracking
+    attributes:
+      label: 進捗管理
+      description: 習慣の達成度を追跡する方法を記載してください
+      placeholder: |
+        ## 📊 測定指標
+        - [ ] 指標1
+        - [ ] 指標2
+        
+        ## 🎯 目標値
+        例：週3回以上
+        
+        ## 📝 記録方法
+        例：アプリで記録
+
+  - type: textarea
+    id: support
+    attributes:
+      label: サポート要素
+      description: 習慣を継続するためのサポート要素を記載してください
+      placeholder: |
+        ## 🛠️ 必要な道具
+        - [ ] アイテム1
+        - [ ] アイテム2
+        
+        ## 📱 使用するアプリ
+        - アプリ名
+        
+        ## 👥 一緒に行う人
+        - メンバー
+
+  - type: textarea
+    id: notes
     attributes:
       label: メモ
-      description: 具体的な内容や目標を記入してください
+      description: その他の注意事項や補足情報があれば記載してください
       placeholder: |
-        - 具体的な目標：
-        - 所要時間：
-        - 準備物：
+        ## ⚠️ 注意点
+        
+        ## 💡 工夫したいポイント
+        
+        ## 🌟 モチベーション維持の工夫
