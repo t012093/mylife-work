@@ -25,27 +25,82 @@ jobs:
           repo-token: ${{ secrets.KEY }}
           ignore-if-assigned: true
 
-      - name: Set priority label
+      - name: Set priority label and project field
         if: github.event.action == 'opened'
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.KEY }}
           script: |
             const body = context.payload.issue.body;
+            // ラベルの設定
+            let priorityLabel = null;
             if (body.includes('Daily（毎日対応）')) {
-              await github.rest.issues.addLabels({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.issue.number,
-                labels: ['priority:daily']
-              });
+              priorityLabel = 'priority:daily';
             } else if (body.includes('Weekly（週次対応）')) {
+              priorityLabel = 'priority:weekly';
+            }
+            
+            if (priorityLabel) {
               await github.rest.issues.addLabels({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: context.issue.number,
-                labels: ['priority:weekly']
+                labels: [priorityLabel]
               });
+            }
+
+            // プロジェクトのプリオリティフィールドを設定
+            const query = `
+              query($owner: String!, $name: String!, $number: Int!) {
+                repository(owner: $owner, name: $name) {
+                  issue(number: $number) {
+                    projectItems(first: 1) {
+                      nodes {
+                        id
+                      }
+                    }
+                  }
+                }
+              }
+            `;
+
+            const variables = {
+              owner: context.repo.owner,
+              name: context.repo.repo,
+              number: context.issue.number
+            };
+
+            try {
+              const result = await github.graphql(query, variables);
+              const projectItemId = result.repository.issue.projectItems.nodes[0]?.id;
+              
+              if (projectItemId) {
+                const priorityOptionId = body.includes('Daily（毎日対応）') ? '79628723' : '0a877460';
+                
+                const mutation = `
+                  mutation($projectItemId: ID!, $value: String!) {
+                    updateProjectV2ItemFieldValue(input: {
+                      projectId: "PVT_kwHOBciMQs4AkV58"
+                      itemId: $projectItemId
+                      fieldId: "PVTSSF_lAHOBciMQs4AkV58zgckJxg"
+                      value: { 
+                        singleSelectOptionId: $value
+                      }
+                    }) {
+                      projectV2Item {
+                        id
+                      }
+                    }
+                  }
+                `;
+                
+                await github.graphql(mutation, {
+                  projectItemId: projectItemId,
+                  value: priorityOptionId
+                });
+              }
+            } catch (error) {
+              console.error('Error updating project priority:', error);
             }
 
       - name: Add inprogress label
@@ -74,12 +129,33 @@ jobs:
       repository-projects: write
     steps:
       - name: Assign issues to project
-        uses: technote-space/create-project-card-action@v1
+        uses: actions/github-script@v6
         if: github.event.action == 'opened'
         with:
-          PROJECT: "test"
-          COLUMN: Backlog
-          GITHUB_TOKEN: ${{ secrets.KEY }}
+          github-token: ${{ secrets.KEY }}
+          script: |
+            const mutation = `
+              mutation($ownerId: ID!, $projectId: ID!, $contentId: ID!) {
+                addProjectV2ItemById(input: {
+                  projectId: $projectId
+                  contentId: $contentId
+                }) {
+                  item {
+                    id
+                  }
+                }
+              }
+            `;
+            
+            try {
+              await github.graphql(mutation, {
+                ownerId: context.payload.repository.owner.id,
+                projectId: "PVT_kwHOBciMQs4AkV58",
+                contentId: context.payload.issue.node_id
+              });
+            } catch (error) {
+              console.error('Error adding issue to project:', error);
+            }
 
   move_assigned_card:
     runs-on: ubuntu-latest
@@ -88,16 +164,114 @@ jobs:
       issues: write
       repository-projects: write
     steps:
-      - uses: alex-page/github-project-automation-plus@v0.3.0
+      - name: Update status
         if: github.event.action == 'assigned'
+        uses: actions/github-script@v6
         with:
-          project: "test"
-          column: In Progress
-          repo-token: ${{ secrets.KEY }}
+          github-token: ${{ secrets.KEY }}
+          script: |
+            const query = `
+              query($owner: String!, $name: String!, $number: Int!) {
+                repository(owner: $owner, name: $name) {
+                  issue(number: $number) {
+                    projectItems(first: 1) {
+                      nodes {
+                        id
+                      }
+                    }
+                  }
+                }
+              }
+            `;
 
-      - uses: alex-page/github-project-automation-plus@v0.3.0
+            const variables = {
+              owner: context.repo.owner,
+              name: context.repo.repo,
+              number: context.issue.number
+            };
+
+            try {
+              const result = await github.graphql(query, variables);
+              const projectItemId = result.repository.issue.projectItems.nodes[0]?.id;
+              
+              if (projectItemId) {
+                const mutation = `
+                  mutation($projectItemId: ID!) {
+                    updateProjectV2ItemFieldValue(input: {
+                      projectId: "PVT_kwHOBciMQs4AkV58"
+                      itemId: $projectItemId
+                      fieldId: "PVTSSF_lAHOBciMQs4AkV58zgckJlI"
+                      value: { 
+                        singleSelectOptionId: "47fc9ee4"
+                      }
+                    }) {
+                      projectV2Item {
+                        id
+                      }
+                    }
+                  }
+                `;
+                
+                await github.graphql(mutation, {
+                  projectItemId: projectItemId
+                });
+              }
+            } catch (error) {
+              console.error('Error updating project status:', error);
+            }
+
+      - name: Update status on reopen
         if: github.event.action == 'reopened'
+        uses: actions/github-script@v6
         with:
-          project: "test"
-          column: In Progress
-          repo-token: ${{ secrets.KEY }}
+          github-token: ${{ secrets.KEY }}
+          script: |
+            const query = `
+              query($owner: String!, $name: String!, $number: Int!) {
+                repository(owner: $owner, name: $name) {
+                  issue(number: $number) {
+                    projectItems(first: 1) {
+                      nodes {
+                        id
+                      }
+                    }
+                  }
+                }
+              }
+            `;
+
+            const variables = {
+              owner: context.repo.owner,
+              name: context.repo.repo,
+              number: context.issue.number
+            };
+
+            try {
+              const result = await github.graphql(query, variables);
+              const projectItemId = result.repository.issue.projectItems.nodes[0]?.id;
+              
+              if (projectItemId) {
+                const mutation = `
+                  mutation($projectItemId: ID!) {
+                    updateProjectV2ItemFieldValue(input: {
+                      projectId: "PVT_kwHOBciMQs4AkV58"
+                      itemId: $projectItemId
+                      fieldId: "PVTSSF_lAHOBciMQs4AkV58zgckJlI"
+                      value: { 
+                        singleSelectOptionId: "47fc9ee4"
+                      }
+                    }) {
+                      projectV2Item {
+                        id
+                      }
+                    }
+                  }
+                `;
+                
+                await github.graphql(mutation, {
+                  projectItemId: projectItemId
+                });
+              }
+            } catch (error) {
+              console.error('Error updating project status:', error);
+            }
