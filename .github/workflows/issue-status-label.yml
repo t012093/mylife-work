@@ -16,6 +16,9 @@ jobs:
       contents: read
       repository-projects: write
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - name: Add initial labels
         if: github.event.action == 'opened'
         uses: andymckay/labeler@1.0.2
@@ -36,6 +39,7 @@ jobs:
           fi
         env:
           GH_TOKEN: ${{ secrets.KEY }}
+
       - name: Add inprogress label
         if: github.event.action == 'assigned' || github.event.action == 'reopened'
         uses: andymckay/labeler@1.0.2
@@ -44,6 +48,7 @@ jobs:
           remove-labels: "backlog, close"
           repo-token: ${{ secrets.KEY }}
           ignore-if-assigned: true
+
       - name: Add close label
         if: github.event.action == 'closed'
         uses: andymckay/labeler@1.0.2
@@ -75,12 +80,16 @@ jobs:
       issues: write
       repository-projects: write
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        
       - uses: alex-page/github-project-automation-plus@v0.3.0
         if: github.event.action == 'assigned'
         with:
           project: "test"
           column: In Progress
           repo-token: ${{ secrets.KEY }}
+
       - uses: alex-page/github-project-automation-plus@v0.3.0
         if: github.event.action == 'reopened'
         with:
