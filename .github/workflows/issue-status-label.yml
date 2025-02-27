@@ -91,7 +91,7 @@ jobs:
                 const mutation = `
                   mutation($projectItemId: ID!, $value: String!) {
                     updateProjectV2ItemFieldValue(input: {
-                      projectId: "PVT_kwHOBciMQs4AkV58"
+                      projectId: "PVT_kwHOBciMQs4AzMEF"
                       itemId: $projectItemId
                       fieldId: "PVTSSF_lAHOBciMQs4AkV58zgckJxg"
                       value: { 
@@ -161,7 +161,7 @@ jobs:
             try {
               await github.graphql(mutation, {
                 ownerId: context.payload.repository.owner.id,
-                projectId: "PVT_kwHOBciMQs4AkV58",
+                projectId: "PVT_kwHOBciMQs4AzMEF",
                 contentId: context.payload.issue.node_id
               });
             } catch (error) {
@@ -209,7 +209,7 @@ jobs:
                 const mutation = `
                   mutation($projectItemId: ID!) {
                     updateProjectV2ItemFieldValue(input: {
-                      projectId: "PVT_kwHOBciMQs4AkV58"
+                      projectId: "PVT_kwHOBciMQs4AzMEF"
                       itemId: $projectItemId
                       fieldId: "PVTSSF_lAHOBciMQs4AkV58zgckJlI"
                       value: { 
@@ -265,7 +265,7 @@ jobs:
                 const mutation = `
                   mutation($projectItemId: ID!) {
                     updateProjectV2ItemFieldValue(input: {
-                      projectId: "PVT_kwHOBciMQs4AkV58"
+                      projectId: "PVT_kwHOBciMQs4AzMEF"
                       itemId: $projectItemId
                       fieldId: "PVTSSF_lAHOBciMQs4AkV58zgckJlI"
                       value: { 
