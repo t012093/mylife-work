@@ -1,4 +1,4 @@
-name: Label issues
+name: Issue Management
 on:
   issues:
     types:
@@ -6,8 +6,9 @@ on:
       - opened
       - closed
       - assigned
+      - unassigned
 env:
-  PROJECT_NAME: test
+  PROJECT_NAME: mylife
 jobs:
   issue_labels:
     runs-on: ubuntu-latest
@@ -18,12 +19,22 @@ jobs:
     steps:
       - name: Add initial labels
         if: github.event.action == 'opened'
-        uses: andymckay/labeler@1.0.2
+        uses: actions/github-script@v6
         with:
-          add-labels: "backlog"
-          remove-labels: "inprogress, close"
-          repo-token: ${{ secrets.KEY }}
-          ignore-if-assigned: true
+          github-token: ${{ secrets.KEY }}
+          script: |
+            const issue = context.payload.issue;
+            const labels = issue.labels.map(l => l.name);
+            const categoryLabel = labels.find(l => ['work', 'routine', 'engineering'].includes(l));
+            
+            if (categoryLabel) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                labels: ['backlog', categoryLabel]
+              });
+            }
 
       - name: Set priority label and project field
         if: github.event.action == 'opened'

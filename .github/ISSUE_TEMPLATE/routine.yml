@@ -1,0 +1,67 @@
+name: ルーティーンタスク
+description: 日常的なルーティーンタスクを作成
+title: "[Routine]: "
+labels: ["routine"]
+body:
+  - type: dropdown
+    id: category
+    attributes:
+      label: ルーティーンカテゴリ
+      description: 活動の種類を選択してください
+      options:
+        - 健康管理/運動
+        - 健康管理/食事
+        - 健康管理/睡眠
+        - 自己啓発/学習
+        - 自己啓発/読書
+        - 自己啓発/資格
+        - 家事/掃除・整理
+        - 家事/買い物
+        - 家事/料理
+        - 趣味・レジャー
+        - 財務管理
+        - 交友関係
+        - メンテナンス
+        - その他
+    validations:
+      required: true
+
+  - type: dropdown
+    id: frequency
+    attributes:
+      label: 頻度
+      description: タスクの実施頻度を選択してください
+      options:
+        - 毎日
+        - 平日のみ
+        - 週末のみ
+        - 週1回
+        - 月1回
+        - 不定期
+    validations:
+      required: true
+
+  - type: dropdown
+    id: time_of_day
+    attributes:
+      label: 実施時間帯
+      description: 予定している時間帯を選択してください
+      options:
+        - 朝（起床後）
+        - 午前中
+        - 昼間
+        - 夕方
+        - 夜
+        - 就寝前
+    validations:
+      required: true
+
+  - type: textarea
+    id: details
+    attributes:
+      label: メモ
+      description: 具体的な内容や目標を記入してください
+      placeholder: |
+        - 具体的な目標：
+        - 所要時間：
+        - 準備物：

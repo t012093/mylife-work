@@ -1,0 +1,57 @@
+name: 仕事タスク
+description: 業務関連のタスクを作成
+title: "[Work]: "
+labels: ["work"]
+body:
+  - type: dropdown
+    id: category
+    attributes:
+      label: 業務カテゴリ
+      description: 業務の種類を選択してください
+      options:
+        - 会議・打ち合わせ
+        - 報告書・資料作成
+        - メール対応
+        - 企画・立案
+        - プレゼンテーション
+        - 調査・分析
+        - 顧客対応
+        - 部内調整
+        - 経費・請求処理
+        - 採用・人事
+        - 研修・セミナー
+        - その他
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 優先度
+      description: タスクの優先度を選択してください
+      options:
+        - 緊急（当日中）
+        - 高（3日以内）
+        - 中（今週中）
+        - 低（来週以降）
+    validations:
+      required: true
+
+  - type: input
+    id: deadline
+    attributes:
+      label: 期限
+      description: 期限を入力してください（YYYY-MM-DD）
+      placeholder: 2024-03-01
+
+  - type: textarea
+    id: details
+    attributes:
+      label: 詳細内容
+      description: タスクの詳細を記入してください
+      placeholder: |
+        - 目的：
+        - 必要な準備：
+        - 注意点：
+    validations:
+      required: true
