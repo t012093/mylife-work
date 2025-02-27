@@ -16,9 +16,6 @@ jobs:
       contents: read
       repository-projects: write
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
       - name: Add initial labels
         if: github.event.action == 'opened'
         uses: andymckay/labeler@1.0.2
@@ -30,15 +27,26 @@ jobs:
 
       - name: Set priority label
         if: github.event.action == 'opened'
-        run: |
-          body="${{ github.event.issue.body }}"
-          if echo "$body" | grep -q "Daily（毎日対応）"; then
-            gh issue edit ${{ github.event.issue.number }} --add-label "priority:daily"
-          elif echo "$body" | grep -q "Weekly（週次対応）"; then
-            gh issue edit ${{ github.event.issue.number }} --add-label "priority:weekly"
-          fi
-        env:
-          GH_TOKEN: ${{ secrets.KEY }}
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.KEY }}
+          script: |
+            const body = context.payload.issue.body;
+            if (body.includes('Daily（毎日対応）')) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                labels: ['priority:daily']
+              });
+            } else if (body.includes('Weekly（週次対応）')) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                labels: ['priority:weekly']
+              });
+            }
 
       - name: Add inprogress label
         if: github.event.action == 'assigned' || github.event.action == 'reopened'
@@ -80,9 +88,6 @@ jobs:
       issues: write
       repository-projects: write
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-        
       - uses: alex-page/github-project-automation-plus@v0.3.0
         if: github.event.action == 'assigned'
         with:
